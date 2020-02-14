@@ -1,0 +1,15 @@
+{
+  "name": "black-sheep-client",
+  "version": "0.1.0",
+  "description": "Secret terminal chat",
+  "main": "index.js",
+  "author": "Mauricio Chávez Olea <mauriciochavez@ciencias.unam.mx>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "socket.io": "^2.3.0"
+  },
+  "scripts": {
+    "start": "node ."
+  }
+}
