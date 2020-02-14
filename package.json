@@ -7,9 +7,13 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "axios": "^0.19.2",
+    "chalk": "^3.0.0",
+    "prompts": "^2.3.0",
     "socket.io": "^2.3.0"
   },
   "scripts": {
-    "start": "node ."
-  }
+    "start": "node src"
+  },
+  "devDependencies": {}
 }
