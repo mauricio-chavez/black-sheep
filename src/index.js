@@ -7,5 +7,7 @@ const socket = io('http://localhost:3000')
 socket.on('connect', async () => {
   logger('success', `Connected with ID ${socket.id} ✨`)
   await roomPrompt(socket)
-  socket.disconnect()
+  setTimeout(() => {
+    socket.disconnect()
+  }, 3000)
 })

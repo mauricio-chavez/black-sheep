@@ -7,22 +7,21 @@ const url =
 
 async function checkRoomAvailability(room) {
   try {
-    const {data: available} = await axios.get(`${url}/room-availability`, {
+    const {data} = await axios.get(`${url}/room-availability`, {
       params: {room}
     })
-    return available
+    return data.available
   } catch (error) {
     logger('error', error)
     return false
   }
 }
 
-async function createRoom(room, password) {
-  // Creates a room
+async function createRoom(room, password, socketId) {
   try {
     const {
       data: {created}
-    } = await axios.post(`${url}/create-room`, {room, password})
+    } = await axios.post(`${url}/create-room`, {room, password, socketId})
 
     if (created) {
       logger('success', `Room "${room}" created`)

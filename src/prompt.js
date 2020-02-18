@@ -26,7 +26,7 @@ async function roomPrompt(socket) {
 
   switch (action) {
     case 'create':
-      const available = checkRoomAvailability(room)
+      const available = await checkRoomAvailability(room)
       if (!available) {
         logger('error', `${room} already exists`)
         return false
@@ -36,18 +36,30 @@ async function roomPrompt(socket) {
           name: 'password',
           message: `Set room's password`
         })
-        await createRoom(room, password)
-        socket.emit('joinRoom', room, password)
+        await createRoom(room, password, socket.id)
+        const {username} = await prompts({
+          type: 'text',
+          name: 'username',
+          message: 'Enter a username'
+        })
+        socket.emit('joinRoom', {room, password, username})
         return true
       }
 
     default:
-      const {password} = await prompts({
-        type: 'password',
-        name: 'password',
-        message: `Enter room's password`
-      })
-      socket.emit('joinRoom', room, password)
+      const {password, username} = await prompts([
+        {
+          type: 'password',
+          name: 'password',
+          message: `Enter room's password`
+        },
+        {
+          type: 'text',
+          name: 'username',
+          message: 'Enter a username'
+        }
+      ])
+      socket.emit('joinRoom', {room, password, username})
       return true
   }
 }
