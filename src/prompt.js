@@ -24,6 +24,16 @@ async function roomPrompt(socket) {
 
   const {action, room} = await prompts(questions)
 
+  if (!action) {
+    logger('message', 'Good bye!')
+    return false
+  }
+
+  if (!room) {
+    logger('error', `You must provide room's name`)
+    return false
+  }
+
   switch (action) {
     case 'create':
       const available = await checkRoomAvailability(room)
@@ -36,17 +46,25 @@ async function roomPrompt(socket) {
           name: 'password',
           message: `Set room's password`
         })
+        if (!password) {
+          logger('error', `You must provide room's password`)
+          return false
+        }
         await createRoom(room, password, socket.id)
         const {username} = await prompts({
           type: 'text',
           name: 'username',
           message: 'Enter a username'
         })
+        if (!username) {
+          logger('error', `You must provide a username`)
+          return false
+        }
         socket.emit('joinRoom', {room, password, username})
         return true
       }
 
-    default:
+    case 'join':
       const {password, username} = await prompts([
         {
           type: 'password',
@@ -59,8 +77,18 @@ async function roomPrompt(socket) {
           message: 'Enter a username'
         }
       ])
+      if (!password || !username) {
+        logger('error', `You must provide username and room's password`)
+        return false
+      }
       socket.emit('joinRoom', {room, password, username})
       return true
+    default:
+      if (!action) {
+        logger('message', 'Good bye!')
+        return false
+      }
+      return false
   }
 }
 
